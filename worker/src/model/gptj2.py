@@ -2,13 +2,10 @@ import os
 from dotenv import load_dotenv
 import requests
 import json
-from ..redis.config import Redis
-from ..schema.chat import Message
-from ..redis.producer import Producer
 
 load_dotenv()
-redis = Redis()
 
+Q= "what is 22 +33?"
 
 class GPT:
     def __init__(self):
@@ -19,26 +16,25 @@ class GPT:
             "inputs": "",
             "parameters": {
                 "return_full_text": False,
-                "use_cache": False,
+                "use_cache": True,
                 "max_new_tokens": 25
             }
 
         }
-        self.json_client = redis.create_rejson_connection()
-        redis_client = redis.create_connection()
-        self.producer = Producer(redis_client)
 
     def query(self, input: str) -> list:
-        self.payload["inputs"] = f"{input} Bot:"
+        self.payload["inputs"] = input
         data = json.dumps(self.payload)
         response = requests.request(
             "POST", self.url, headers=self.headers, data=data)
-        data = json.loads(response.content.decode("utf-8"))
-        print(data)
+        print(json.loads(response.content.decode("utf-8")))
+        return json.loads(response.content.decode("utf-8"))
 
-        text = data[0]['generated_text']
-
-        res = str(text.split("Human:")[0]).strip("\n").strip()
-        print(res)
-
-        return res
+if __name__ == "__main__":
+    #GPT().query("Will artificial intelligence help humanity conquer the universe?")
+    #GPT().query("What is the world population?")
+    #GPT().query("What is the speed of the fastest computer in the world?")
+    #GPT().query("Who is richest man in the world?")
+    #GPT().query("Is Elon Musk Alien?")
+    #GPT().query("is it possible to hack wifi?")
+    GPT().query(Q)

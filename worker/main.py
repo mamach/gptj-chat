@@ -42,10 +42,10 @@ async def main():
                     # Create a new message instance and add to cache, specifying the source as human
                     msg = Message(msg=message)
 
-                    await cache.add_message_to_cache(token=token, source="human", message_data=msg.dict())
+                    await cache.add_message_to_cache(token="4bcbd16f-84d3-4e6f-bc1b-2577798b2558", source="human", message_data=msg.dict())
 
                     # Get chat history from cache
-                    data = await cache.get_chat_history(token=token)
+                    data = await cache.get_chat_history(token="4bcbd16f-84d3-4e6f-bc1b-2577798b2558")
 
                     # Clean message input and send to query
                     message_data = data['messages'][-4:]
@@ -64,7 +64,7 @@ async def main():
 
                     await producer.add_to_stream(stream_data, "response_channel")
 
-                    await cache.add_message_to_cache(token=token, source="bot", message_data=msg.dict())
+                    await cache.add_message_to_cache(token="4bcbd16f-84d3-4e6f-bc1b-2577798b2558", source="bot", message_data=msg.dict())
 
                 # Delete messaage from queue after it has been processed
 
